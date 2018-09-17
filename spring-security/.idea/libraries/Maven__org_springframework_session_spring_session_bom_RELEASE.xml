@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.springframework.session:spring-session-bom:RELEASE">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/session/spring-session-bom/RELEASE/spring-session-bom-RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/session/spring-session-bom/RELEASE/spring-session-bom-RELEASE-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/session/spring-session-bom/RELEASE/spring-session-bom-RELEASE-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
