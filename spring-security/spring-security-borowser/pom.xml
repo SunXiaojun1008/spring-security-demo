@@ -19,11 +19,12 @@
             <version>${spring.security.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session -->
         <dependency>
             <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session-bom</artifactId>
-            <version>RELEASE</version>
+            <artifactId>spring-session</artifactId>
         </dependency>
+
     </dependencies>
 
 </project>

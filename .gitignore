@@ -2,3 +2,5 @@
 *.imi
 #忽略.idea文件夹
 .idea
+#忽略target文件夹
+target
