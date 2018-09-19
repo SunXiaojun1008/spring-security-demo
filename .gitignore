@@ -4,3 +4,4 @@
 .idea
 #忽略target文件夹
 target
+.DS_Store
