@@ -18,15 +18,15 @@ public class MyAspect {
     @Around("execution(* com.spring.security.web.controller.UserController.*(..))")
     public Object handleControllerMethod(ProceedingJoinPoint point) throws Throwable {
 
-        System.out.println(" aspect  start ");
+        System.out.println("aspect  start ");
 
         Object[] args = point.getArgs();
-        for (Object arg : args){
+        for (Object arg : args) {
             System.out.println(arg);
         }
-        long start  = new Date().getTime();
+        long start = new Date().getTime();
 
-        Object object= point.proceed();
+        Object object = point.proceed();
 
         System.out.println("aspect 耗时： " + (new Date().getTime() - start));
 
