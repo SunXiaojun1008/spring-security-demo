@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 自定义登录失败处理
+ */
 @Component("springSecurityAuthenctiationFailureHandler")
 public class SpringSecurityAuthenctiationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 

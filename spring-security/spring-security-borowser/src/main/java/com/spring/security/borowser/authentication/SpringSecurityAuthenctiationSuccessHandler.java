@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 自定义登录成功处理
+ */
 @Component("springSecurityAuthenctiationSuccessHandler")
 public class SpringSecurityAuthenctiationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private Logger logger = LoggerFactory.getLogger(getClass());
