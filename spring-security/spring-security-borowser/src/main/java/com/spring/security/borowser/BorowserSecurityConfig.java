@@ -8,11 +8,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 /**
  * SpringSecurity 配置
@@ -29,6 +34,21 @@ public class BorowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     protected AuthenticationFailureHandler springSecurityAuthenctiationFailureHandler;
+
+    @Autowired
+    private DataSource dataSource;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+        tokenRepository.setCreateTableOnStartup(true);
+        return tokenRepository;
+    }
+
     /**
      * 配置拦截
      *
@@ -61,11 +81,16 @@ public class BorowserSecurityConfig extends WebSecurityConfigurerAdapter {
                  */
                 .failureHandler(springSecurityAuthenctiationFailureHandler)
                 .and()
+                .rememberMe()
+                .tokenRepository(persistentTokenRepository())
+                .tokenValiditySeconds(securityProperties.getBorowser().getRememberMeSeconds())
+                .userDetailsService(userDetailsService)
+                .and()
                 .authorizeRequests()
                 /**
                  * 访问singIn.html时，不需要身份认证
                  */
-                .antMatchers("/authentication/require","/code/image","/error",securityProperties.getBorowser().getLoginPage()).permitAll()
+                .antMatchers("/authentication/require", "/code/image", "/error", securityProperties.getBorowser().getLoginPage()).permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

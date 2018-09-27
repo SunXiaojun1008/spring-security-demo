@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 /**
  * 处理用户校验的逻辑
  */
-@Component
+@Component("userDetailsService")
 public class MyUserDetailsService implements UserDetailsService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
