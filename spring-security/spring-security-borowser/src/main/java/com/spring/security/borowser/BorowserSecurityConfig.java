@@ -1,6 +1,7 @@
 package com.spring.security.borowser;
 
 import com.spring.security.core.properties.SecurityProperties;
+import com.spring.security.core.validate.code.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * SpringSecurity 配置
@@ -35,7 +37,12 @@ public class BorowserSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.formLogin()
+        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
+        validateCodeFilter.setAuthenticationFailureHandler(springSecurityAuthenctiationFailureHandler);
+        validateCodeFilter.setSecurityProperties(securityProperties);
+        validateCodeFilter.afterPropertiesSet();
+        http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
+                .formLogin()
                 /**
                  * 自定义登录页面
                  * /authentication/require
@@ -58,7 +65,7 @@ public class BorowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 /**
                  * 访问singIn.html时，不需要身份认证
                  */
-                .antMatchers("/authentication/require",securityProperties.getBorowser().getLoginPage()).permitAll()
+                .antMatchers("/authentication/require","/code/image","/error",securityProperties.getBorowser().getLoginPage()).permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
