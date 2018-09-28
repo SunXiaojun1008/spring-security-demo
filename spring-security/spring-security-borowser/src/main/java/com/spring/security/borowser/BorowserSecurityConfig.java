@@ -91,7 +91,7 @@ public class BorowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 /**
                  * 访问singIn.html时，不需要身份认证
                  */
-                .antMatchers("/authentication/require", "/code/image", "/error", securityProperties.getBorowser().getLoginPage()).permitAll()
+                .antMatchers("/authentication/require", "/code/*", "/error", securityProperties.getBorowser().getLoginPage()).permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

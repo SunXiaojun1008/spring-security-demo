@@ -4,36 +4,27 @@ import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 
 /**
- * 图形验证码实体类
+ * 短信验证码实体类
  */
-public class ImageCode {
+public class ValidateCode {
 
 
-    private BufferedImage image;
 
     private String code;
 
     private LocalDateTime expireTime;
 
 
-    public ImageCode(BufferedImage image, String code, int expireTime) {
-        this.image = image;
+    public ValidateCode(String code, int expireTime) {
+
         this.code = code;
         this.expireTime = LocalDateTime.now().plusSeconds(expireTime);
     }
-    public ImageCode(BufferedImage image, String code, LocalDateTime expireTime) {
-        this.image = image;
+    public ValidateCode(String code, LocalDateTime expireTime) {
         this.code = code;
         this.expireTime = expireTime;
     }
 
-    public BufferedImage getImage() {
-        return image;
-    }
-
-    public void setImage(BufferedImage image) {
-        this.image = image;
-    }
 
     public String getCode() {
         return code;
