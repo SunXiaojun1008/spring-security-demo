@@ -1,5 +1,7 @@
 package com.spring.security.borowser.authentication;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spring.security.core.properties.LoginResponseType;
 import com.spring.security.core.properties.SecurityProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,12 +23,19 @@ public class SpringSecurityAuthenctiationSuccessHandler extends SimpleUrlAuthent
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
     private SecurityProperties securityProperties;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         logger.info("登录成功");
-
-        super.onAuthenticationSuccess(request, response, authentication);
+        if (LoginResponseType.JSON.equals(securityProperties.getBorowser().getLoginType())) {
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write(objectMapper.writeValueAsString(authentication));
+        } else {
+            super.onAuthenticationSuccess(request, response, authentication);
+        }
     }
 }

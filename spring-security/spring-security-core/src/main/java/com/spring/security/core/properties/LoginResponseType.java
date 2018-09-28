@@ -4,8 +4,7 @@
 package com.spring.security.core.properties;
 
 /**
- * @author zhailiang
- *
+ * @author 孙小军
  */
 public enum LoginResponseType {
 	

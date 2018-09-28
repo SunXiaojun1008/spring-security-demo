@@ -6,12 +6,22 @@ public class BorowserProperties {
 
     private int rememberMeSeconds = 3600;
 
+    private LoginResponseType loginType = LoginResponseType.JSON;
+
     public String getLoginPage() {
         return loginPage;
     }
 
     public void setLoginPage(String loginPage) {
         this.loginPage = loginPage;
+    }
+
+    public LoginResponseType getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(LoginResponseType loginType) {
+        this.loginType = loginType;
     }
 
     public int getRememberMeSeconds() {
