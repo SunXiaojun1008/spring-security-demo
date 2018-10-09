@@ -50,7 +50,7 @@ public abstract class AbstractValidateCodeProcesser<C> implements ValidateCodePr
      * @param validateCode
      */
     private void save(ServletWebRequest request, C validateCode) {
-        sessionStrategy.setAttribute(request, SESSION_KEY_PREFIX+getProcesserType(request).toLowerCase(), validateCode);
+        sessionStrategy.setAttribute(request, SESSION_KEY_PREFIX+getProcesserType(request).toUpperCase(), validateCode);
     }
 
     /**
