@@ -1,6 +1,7 @@
 package com.spring.security.borowser;
 
 import com.spring.security.borowser.support.SimpleResponse;
+import com.spring.security.core.properties.SecurityConstants;
 import com.spring.security.core.properties.SecurityProperties;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ public class BorowserSecurityController {
     @Autowired
     private SecurityProperties securityProperties;
 
-    @RequestMapping("/authentication/require")
+    @RequestMapping(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL)
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public SimpleResponse requireAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
 

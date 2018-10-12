@@ -2,7 +2,8 @@ package com.spring.security.core.properties;
 
 public class BorowserProperties {
 
-    private String loginPage = "/signIn.html";
+    private String loginPage = SecurityConstants.DEFAULT_LOGIN_PAGE_URL;
+
 
     private int rememberMeSeconds = 3600;
 

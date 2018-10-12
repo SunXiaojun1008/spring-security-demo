@@ -1,21 +1,19 @@
 package com.spring.security.borowser;
 
+import com.spring.security.core.authentication.AbstractChannelSecurityConfig;
 import com.spring.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
+import com.spring.security.core.properties.SecurityConstants;
 import com.spring.security.core.properties.SecurityProperties;
-import com.spring.security.core.validate.code.SmsCodeFilter;
-import com.spring.security.core.validate.code.ValidateCodeFilter;
+import com.spring.security.core.validate.code.ValidateCodeSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -25,7 +23,7 @@ import javax.sql.DataSource;
  * SpringSecurity 配置
  */
 @Configuration
-public class BorowserSecurityConfig extends WebSecurityConfigurerAdapter {
+public class BorowserSecurityConfig extends AbstractChannelSecurityConfig {
 
 
     @Autowired
@@ -42,6 +40,9 @@ public class BorowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private ValidateCodeSecurityConfig validateCodeSecurityConfig;
 
     @Autowired
     private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
@@ -62,55 +63,29 @@ public class BorowserSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
-        validateCodeFilter.setAuthenticationFailureHandler(springSecurityAuthenctiationFailureHandler);
-        validateCodeFilter.setSecurityProperties(securityProperties);
-        validateCodeFilter.afterPropertiesSet();
+        applyPasswordAuthenticationConfig(http);
 
-        SmsCodeFilter smsCodeFilter = new SmsCodeFilter();
-        smsCodeFilter.setAuthenticationFailureHandler(springSecurityAuthenctiationFailureHandler);
-        smsCodeFilter.setSecurityProperties(securityProperties);
-        smsCodeFilter.afterPropertiesSet();
-
-        http.addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin()
-                /**
-                 * 自定义登录页面
-                 * /authentication/require
-                 */
-                .loginPage("/authentication/require")
-                /**
-                 * 登录请求,通知SpringSecurity使用认证请求
-                 */
-                .loginProcessingUrl("/authentication/form")
-                /**
-                 * 增加登录成功处理
-                 */
-                .successHandler(springSecurityAuthenctiationSuccessHandler)
-                /**
-                 * 增加登录失败处理
-                 */
-                .failureHandler(springSecurityAuthenctiationFailureHandler)
-                .and()
+        http.apply(validateCodeSecurityConfig)
+                    .and()
+                .apply(smsCodeAuthenticationSecurityConfig)
+                    .and()
                 .rememberMe()
-                .tokenRepository(persistentTokenRepository())
-                .tokenValiditySeconds(securityProperties.getBorowser().getRememberMeSeconds())
-                .userDetailsService(userDetailsService)
-                .and()
+                    .tokenRepository(persistentTokenRepository())
+                    .tokenValiditySeconds(securityProperties.getBorowser().getRememberMeSeconds())
+                    .userDetailsService(userDetailsService)
+                    .and()
                 .authorizeRequests()
-                /**
-                 * 访问singIn.html时，不需要身份认证
-                 */
-                .antMatchers("/authentication/require", "/code/*", securityProperties.getBorowser().getLoginPage()).permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                /**
-                 * 关闭跨站防护攻击
-                 */
-                .csrf().disable()
-                .apply(smsCodeAuthenticationSecurityConfig);
+                    .antMatchers(
+                            SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
+                            SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
+                            securityProperties.getBorowser().getLoginPage(),
+                            SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX+"/*","/code/*")
+                            .permitAll()
+                    .anyRequest()
+                    .authenticated()
+                    .and()
+                .csrf().disable();
+
     }
 
     /**

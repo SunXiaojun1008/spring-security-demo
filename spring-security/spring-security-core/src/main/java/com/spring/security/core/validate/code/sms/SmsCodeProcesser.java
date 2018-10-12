@@ -1,14 +1,13 @@
 package com.spring.security.core.validate.code.sms;
 
-import com.spring.security.core.validate.code.AbstractValidateCodeProcesser;
+import com.spring.security.core.validate.code.impl.AbstractValidateCodeProcesser;
 import com.spring.security.core.validate.code.ValidateCode;
-import com.spring.security.core.validate.code.sms.SmsCodeSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 
-@Component("smsCodeProcesser")
+@Component("smsValidateCodeProcesser")
 public class SmsCodeProcesser extends AbstractValidateCodeProcesser<ValidateCode> {
 
     /**
@@ -29,4 +28,8 @@ public class SmsCodeProcesser extends AbstractValidateCodeProcesser<ValidateCode
         smsCodeSender.send(mobile, validateCode.getCode());
     }
 
+    @Override
+    public void validate(ServletWebRequest servletWebRequest) {
+
+    }
 }

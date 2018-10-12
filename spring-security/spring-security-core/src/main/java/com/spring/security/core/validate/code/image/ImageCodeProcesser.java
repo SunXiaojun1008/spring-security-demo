@@ -1,13 +1,13 @@
 package com.spring.security.core.validate.code.image;
 
-import com.spring.security.core.validate.code.AbstractValidateCodeProcesser;
+import com.spring.security.core.validate.code.impl.AbstractValidateCodeProcesser;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.imageio.ImageIO;
 
 
-@Component("imageCodeProcesser")
+@Component("imageValidateCodeProcesser")
 public class ImageCodeProcesser extends AbstractValidateCodeProcesser<ImageCode> {
 
 
@@ -23,4 +23,8 @@ public class ImageCodeProcesser extends AbstractValidateCodeProcesser<ImageCode>
         ImageIO.write(imageCode.getImage(), "JPEG", request.getResponse().getOutputStream());
     }
 
+    @Override
+    public void validate(ServletWebRequest servletWebRequest) {
+
+    }
 }

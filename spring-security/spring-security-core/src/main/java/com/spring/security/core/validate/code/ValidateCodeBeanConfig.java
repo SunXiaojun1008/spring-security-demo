@@ -18,12 +18,12 @@ public class ValidateCodeBeanConfig {
 
     /**
      * @return
-     * @ConditionalOnMissingBean(name = "imageCodeGenerator")
+     * @ConditionalOnMissingBean(name = "imageValidateCodeGenerator")
      * 如果不存在imageCodeGenerator是，使用如下配置
      */
     @Bean
-    @ConditionalOnMissingBean(name = "imageCodeGenerator")
-    public ValidateCodeGenerator imageCodeGenerator() {
+    @ConditionalOnMissingBean(name = "imageValidateCodeGenerator")
+    public ValidateCodeGenerator imageValidateCodeGenerator() {
         ImageCodeGenerator codeGenerator = new ImageCodeGenerator();
         codeGenerator.setSecurityProperties(securityProperties);
         return codeGenerator;
