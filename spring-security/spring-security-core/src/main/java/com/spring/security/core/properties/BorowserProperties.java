@@ -4,6 +4,7 @@ public class BorowserProperties {
 
     private String loginPage = SecurityConstants.DEFAULT_LOGIN_PAGE_URL;
 
+    private String signUpUrl = "/signUp.html";
 
     private int rememberMeSeconds = 3600;
 
@@ -15,6 +16,14 @@ public class BorowserProperties {
 
     public void setLoginPage(String loginPage) {
         this.loginPage = loginPage;
+    }
+
+    public String getSignUpUrl() {
+        return signUpUrl;
+    }
+
+    public void setSignUpUrl(String signUpUrl) {
+        this.signUpUrl = signUpUrl;
     }
 
     public LoginResponseType getLoginType() {
@@ -32,4 +41,6 @@ public class BorowserProperties {
     public void setRememberMeSeconds(int rememberMeSeconds) {
         this.rememberMeSeconds = rememberMeSeconds;
     }
+
+
 }
