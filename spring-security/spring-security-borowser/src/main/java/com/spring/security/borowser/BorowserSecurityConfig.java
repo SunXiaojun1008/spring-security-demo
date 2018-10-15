@@ -1,5 +1,6 @@
 package com.spring.security.borowser;
 
+import com.spring.security.borowser.session.ImoocExpiredSessionStrategy;
 import com.spring.security.core.authentication.AbstractChannelSecurityConfig;
 import com.spring.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import com.spring.security.core.properties.SecurityConstants;
@@ -16,6 +17,8 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.session.InvalidSessionStrategy;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.sql.DataSource;
@@ -51,6 +54,12 @@ public class BorowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private SpringSocialConfigurer springSecuritySocialSecurityConfig;
 
+    @Autowired
+    private InvalidSessionStrategy invalidSessionStrategy;
+
+    @Autowired
+    private SessionInformationExpiredStrategy sessionInformationExpiredStrategy;
+
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
@@ -70,28 +79,35 @@ public class BorowserSecurityConfig extends AbstractChannelSecurityConfig {
         applyPasswordAuthenticationConfig(http);
 
         http.apply(validateCodeSecurityConfig)
-                    .and()
+                .and()
                 .apply(smsCodeAuthenticationSecurityConfig)
-                    .and()
+                .and()
                 .apply(springSecuritySocialSecurityConfig)
-                    .and()
+                .and()
                 .rememberMe()
-                    .tokenRepository(persistentTokenRepository())
-                    .tokenValiditySeconds(securityProperties.getBorowser().getRememberMeSeconds())
-                    .userDetailsService(userDetailsService)
-                    .and()
+                .tokenRepository(persistentTokenRepository())
+                .tokenValiditySeconds(securityProperties.getBorowser().getRememberMeSeconds())
+                .userDetailsService(userDetailsService)
+                .and()
+                .sessionManagement()
+                .invalidSessionStrategy(invalidSessionStrategy)
+                .maximumSessions(securityProperties.getBorowser().getSession().getMaximumSessions())
+                .maxSessionsPreventsLogin(securityProperties.getBorowser().getSession().isMaxSessionsPreventsLogin())
+                .expiredSessionStrategy(sessionInformationExpiredStrategy)
+                .and()
+                .and()
                 .authorizeRequests()
-                    .antMatchers(
-                            SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
-                            SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
-                            securityProperties.getBorowser().getLoginPage(),
-                            SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX+"/*",
-                            securityProperties.getBorowser().getSignUpUrl(),
-                            "/user/regist")
-                            .permitAll()
-                    .anyRequest()
-                    .authenticated()
-                    .and()
+                .antMatchers(
+                        SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
+                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
+                        securityProperties.getBorowser().getLoginPage(),
+                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*",
+                        securityProperties.getBorowser().getSignUpUrl(),
+                        "/user/regist", "/session/invalid")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
                 .csrf().disable();
 
     }

@@ -2,6 +2,8 @@ package com.spring.security.core.properties;
 
 public class BorowserProperties {
 
+    SessionProperties session = new SessionProperties();
+
     private String loginPage = SecurityConstants.DEFAULT_LOGIN_PAGE_URL;
 
     private String signUpUrl = "/signUp.html";
@@ -42,5 +44,11 @@ public class BorowserProperties {
         this.rememberMeSeconds = rememberMeSeconds;
     }
 
+    public SessionProperties getSession() {
+        return session;
+    }
 
+    public void setSession(SessionProperties session) {
+        this.session = session;
+    }
 }
