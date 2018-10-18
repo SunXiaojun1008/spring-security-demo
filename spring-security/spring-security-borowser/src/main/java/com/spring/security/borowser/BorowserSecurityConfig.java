@@ -112,14 +112,4 @@ public class BorowserSecurityConfig extends AbstractChannelSecurityConfig {
 
     }
 
-    /**
-     * 密码加密方式
-     *
-     * @return
-     */
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 }

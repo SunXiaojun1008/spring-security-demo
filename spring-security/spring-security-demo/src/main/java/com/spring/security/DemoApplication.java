@@ -8,7 +8,6 @@ import org.springframework.session.config.annotation.web.http.EnableSpringHttpSe
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
-@EnableScheduling
 @EnableSwagger2
 public class DemoApplication {
     public static void main(String[] args) {

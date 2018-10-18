@@ -1,4 +1,4 @@
-package com.spring.security.borowser.support;
+package com.spring.security.core.support;
 
 public class SimpleResponse {
 
