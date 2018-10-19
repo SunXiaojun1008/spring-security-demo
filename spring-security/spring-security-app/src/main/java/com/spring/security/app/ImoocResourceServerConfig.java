@@ -6,6 +6,7 @@ import com.spring.security.core.properties.SecurityProperties;
 import com.spring.security.core.validate.code.ValidateCodeSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -22,6 +23,7 @@ import org.springframework.social.security.SpringSocialConfigurer;
  **/
 @Configuration
 @EnableResourceServer
+@Order(2)
 public class ImoocResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Autowired
@@ -33,8 +35,8 @@ public class ImoocResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Autowired
     protected AuthenticationFailureHandler springSecurityAuthenctiationFailureHandler;
 
-    @Autowired
-    private ValidateCodeSecurityConfig validateCodeSecurityConfig;
+//    @Autowired
+//    private ValidateCodeSecurityConfig validateCodeSecurityConfig;
 
     @Autowired
     private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
@@ -68,7 +70,7 @@ public class ImoocResourceServerConfig extends ResourceServerConfigurerAdapter {
                         securityProperties.getBorowser().getLoginPage(),
                         SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*",
                         securityProperties.getBorowser().getSignUpUrl(),
-                        "/user/regist", "/session/invalid","/oauth/authorize")
+                        "/user/regist", "/session/invalid")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
