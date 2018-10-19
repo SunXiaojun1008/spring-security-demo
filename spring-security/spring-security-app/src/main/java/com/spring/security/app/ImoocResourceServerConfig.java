@@ -20,10 +20,14 @@ import org.springframework.social.security.SpringSocialConfigurer;
  * @className ImoocResourceServerConfig
  * @description TODO
  * @date 2018/10/18 19:23
+ * 使用Order()注解设置配置文件的加载顺序
+ * oauth2的资源服务器过滤器一定要在认证过滤器后面，
+ * 否则SpringSecurity默认的登录页面将无法显示
+ *
  **/
 @Configuration
 @EnableResourceServer
-@Order(2)
+//@Order(2)
 public class ImoocResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Autowired
@@ -48,8 +52,6 @@ public class ImoocResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-
-        http.authorizeRequests().anyRequest().fullyAuthenticated();
 
         http.formLogin()
                 .loginPage(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL)
