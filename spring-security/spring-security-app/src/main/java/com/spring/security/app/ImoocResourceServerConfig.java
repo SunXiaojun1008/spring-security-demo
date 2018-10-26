@@ -39,8 +39,8 @@ public class ImoocResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Autowired
     protected AuthenticationFailureHandler springSecurityAuthenctiationFailureHandler;
 
-//    @Autowired
-//    private ValidateCodeSecurityConfig validateCodeSecurityConfig;
+    @Autowired
+    private ValidateCodeSecurityConfig validateCodeSecurityConfig;
 
     @Autowired
     private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
@@ -59,8 +59,8 @@ public class ImoocResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .successHandler(springSecurityAuthenctiationSuccessHandler)
                 .failureHandler(springSecurityAuthenctiationFailureHandler);
 
-        http//.apply(validateCodeSecurityConfig)
-            //    .and()
+        http.apply(validateCodeSecurityConfig)
+                .and()
                 .apply(smsCodeAuthenticationSecurityConfig)
                 .and()
                 .apply(springSecuritySocialSecurityConfig)
